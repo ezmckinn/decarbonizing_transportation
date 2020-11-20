@@ -1,2 +1,2 @@
-# decarbonizing_transportation
-Interactive tool for combining Decarbonizing Transportation tools
+# Decarbonizing Transportation
+Interactive tool for identifying mix of low-carbon transportation strategies that will help cities meet their Paris Agreement goals.
