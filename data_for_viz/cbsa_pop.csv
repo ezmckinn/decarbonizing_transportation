@@ -1,0 +1,391 @@
+"","GEOID","cbsa","state_abb","variable","pop","moe"
+"1","10180","Abilene","TX","B01003_001",170009,NA
+"2","10380","Aguadilla-Isabela","PR","B01003_001",307555,NA
+"3","10420","Akron","OH","B01003_001",704454,NA
+"4","10500","Albany","GA","B01003_001",153101,NA
+"5","10540","Albany","OR","B01003_001",122870,NA
+"6","10580","Albany-Schenectady-Troy","NY","B01003_001",880481,NA
+"7","10740","Albuquerque","NM","B01003_001",910012,NA
+"8","10780","Alexandria","LA","B01003_001",153894,NA
+"9","10900","Allentown-Bethlehem-Easton","PA","B01003_001",834615,NA
+"10","11020","Altoona","PA","B01003_001",123842,NA
+"11","11100","Amarillo","TX","B01003_001",263412,125
+"12","11180","Ames","IA","B01003_001",96922,NA
+"13","11260","Anchorage","AK","B01003_001",399576,NA
+"14","11460","Ann Arbor","MI","B01003_001",365961,NA
+"15","11500","Anniston-Oxford-Jacksonville","AL","B01003_001",115098,NA
+"16","11540","Appleton","WI","B01003_001",234561,NA
+"17","11640","Arecibo","PR","B01003_001",183890,NA
+"18","11700","Asheville","NC","B01003_001",449937,NA
+"19","12020","Athens-Clarke County","GA","B01003_001",205303,NA
+"20","12060","Atlanta-Sandy Springs-Roswell","GA","B01003_001",5779463,NA
+"21","12100","Atlantic City-Hammonton","NJ","B01003_001",268539,NA
+"22","12220","Auburn-Opelika","AL","B01003_001",159287,NA
+"23","12260","Augusta-Richmond County","GA","B01003_001",594300,NA
+"24","12420","Austin-Round Rock","TX","B01003_001",2058351,NA
+"25","12540","Bakersfield","CA","B01003_001",883053,NA
+"26","12580","Baltimore-Columbia-Towson","MD","B01003_001",2793250,NA
+"27","12620","Bangor","ME","B01003_001",151748,NA
+"28","12700","Barnstable Town","MA","B01003_001",213690,NA
+"29","12940","Baton Rouge","LA","B01003_001",829642,NA
+"30","12980","Battle Creek","MI","B01003_001",134473,NA
+"31","13020","Bay City","MI","B01003_001",104786,NA
+"32","13140","Beaumont-Port Arthur","TX","B01003_001",409693,NA
+"33","13220","Beckley","WV","B01003_001",120358,NA
+"34","13380","Bellingham","WA","B01003_001",216812,NA
+"35","13460","Bend-Redmond","OR","B01003_001",180640,NA
+"36","13740","Billings","MT","B01003_001",169086,100
+"37","13780","Binghamton","NY","B01003_001",243447,NA
+"38","13820","Birmingham-Hoover","AL","B01003_001",1147054,NA
+"39","13900","Bismarck","ND","B01003_001",130531,92
+"40","13980","Blacksburg-Christiansburg-Radford","VA","B01003_001",182341,NA
+"41","14010","Bloomington","IL","B01003_001",189261,NA
+"42","14020","Bloomington","IN","B01003_001",166281,NA
+"43","14100","Bloomsburg-Berwick","PA","B01003_001",84514,NA
+"44","14260","Boise City","ID","B01003_001",693952,NA
+"45","14460","Boston-Cambridge-Newton","MA","B01003_001",4811732,NA
+"46","14500","Boulder","CO","B01003_001",321030,NA
+"47","14540","Bowling Green","KY","B01003_001",172088,NA
+"48","14740","Bremerton-Silverdale","WA","B01003_001",262475,NA
+"49","14860","Bridgeport-Stamford-Norwalk","CT","B01003_001",944348,NA
+"50","15180","Brownsville-Harlingen","TX","B01003_001",421750,NA
+"51","15260","Brunswick","GA","B01003_001",116655,NA
+"52","15380","Buffalo-Cheektowaga-Niagara Falls","NY","B01003_001",1131570,NA
+"53","15500","Burlington","NC","B01003_001",160576,NA
+"54","15540","Burlington-South Burlington","VT","B01003_001",218042,NA
+"55","15680","California-Lexington Park","MD","B01003_001",111531,NA
+"56","15940","Canton-Massillon","OH","B01003_001",401053,NA
+"57","15980","Cape Coral-Fort Myers","FL","B01003_001",718679,NA
+"58","16020","Cape Girardeau","MO","B01003_001",97137,NA
+"59","16060","Carbondale-Marion","IL","B01003_001",125850,NA
+"60","16180","Carson City","NV","B01003_001",54467,NA
+"61","16220","Casper","WY","B01003_001",80610,NA
+"62","16300","Cedar Rapids","IA","B01003_001",268315,NA
+"63","16540","Chambersburg-Waynesboro","PA","B01003_001",153751,NA
+"64","16580","Champaign-Urbana","IL","B01003_001",239273,NA
+"65","16620","Charleston","WV","B01003_001",217312,NA
+"66","16700","Charleston-North Charleston","SC","B01003_001",759247,NA
+"67","16740","Charlotte-Concord-Gastonia","NC","B01003_001",2473125,NA
+"68","16820","Charlottesville","VA","B01003_001",230905,NA
+"69","16860","Chattanooga","TN","B01003_001",552043,NA
+"70","16940","Cheyenne","WY","B01003_001",97692,NA
+"71","16980","Chicago-Naperville-Elgin","IL","B01003_001",9536428,NA
+"72","17020","Chico","CA","B01003_001",227075,NA
+"73","17140","Cincinnati","OH","B01003_001",2168825,NA
+"74","17300","Clarksville","TN","B01003_001",282994,NA
+"75","17420","Cleveland","TN","B01003_001",121339,NA
+"76","17460","Cleveland-Elyria","OH","B01003_001",2061766,NA
+"77","17660","Coeur d'Alene","ID","B01003_001",153605,NA
+"78","17780","College Station-Bryan","TX","B01003_001",253946,NA
+"79","17820","Colorado Springs","CO","B01003_001",712266,NA
+"80","17860","Columbia","MO","B01003_001",176515,NA
+"81","17900","Columbia","SC","B01003_001",816664,NA
+"82","17980","Columbus","GA","B01003_001",307724,NA
+"83","18020","Columbus","IN","B01003_001",81893,NA
+"84","18140","Columbus","OH","B01003_001",2054062,NA
+"85","18580","Corpus Christi","TX","B01003_001",452295,NA
+"86","18700","Corvallis","OR","B01003_001",89780,NA
+"87","18880","Crestview-Fort Walton Beach-Destin","FL","B01003_001",266595,NA
+"88","19060","Cumberland","MD","B01003_001",99255,NA
+"89","19100","Dallas-Fort Worth-Arlington","TX","B01003_001",7255028,NA
+"90","19140","Dalton","GA","B01003_001",143406,NA
+"91","19180","Danville","IL","B01003_001",78407,NA
+"92","19300","Daphne-Fairhope-Foley","AL","B01003_001",208107,NA
+"93","19340","Davenport-Moline-Rock Island","IA","B01003_001",382720,NA
+"94","19380","Dayton","OH","B01003_001",802645,NA
+"95","19460","Decatur","AL","B01003_001",152293,NA
+"96","19500","Decatur","IL","B01003_001",106512,NA
+"97","19660","Deltona-Daytona Beach-Ormond Beach","FL","B01003_001",634773,NA
+"98","19740","Denver-Aurora-Lakewood","CO","B01003_001",2850221,NA
+"99","19780","Des Moines-West Des Moines","IA","B01003_001",634201,NA
+"100","19820","Detroit-Warren-Dearborn","MI","B01003_001",4317179,NA
+"101","20020","Dothan","AL","B01003_001",147967,NA
+"102","20100","Dover","DE","B01003_001",174822,NA
+"103","20220","Dubuque","IA","B01003_001",96802,NA
+"104","20260","Duluth","MN","B01003_001",279022,NA
+"105","20500","Durham-Chapel Hill","NC","B01003_001",558491,NA
+"106","20700","East Stroudsburg","PA","B01003_001",167586,NA
+"107","20740","Eau Claire","WI","B01003_001",166626,NA
+"108","20940","El Centro","CA","B01003_001",180216,NA
+"109","21060","Elizabethtown-Fort Knox","KY","B01003_001",150577,NA
+"110","21140","Elkhart-Goshen","IN","B01003_001",203604,NA
+"111","21300","Elmira","NY","B01003_001",85740,NA
+"112","21340","El Paso","TX","B01003_001",841752,NA
+"113","21420","Enid","OK","B01003_001",62190,NA
+"114","21500","Erie","PA","B01003_001",275972,NA
+"115","21660","Eugene","OR","B01003_001",368882,NA
+"116","21780","Evansville","IN","B01003_001",314967,NA
+"117","21820","Fairbanks","AK","B01003_001",99653,NA
+"118","22020","Fargo","ND","B01003_001",237003,NA
+"119","22140","Farmington","NM","B01003_001",127455,NA
+"120","22180","Fayetteville","NC","B01003_001",385345,NA
+"121","22220","Fayetteville-Springdale-Rogers","AR","B01003_001",526412,NA
+"122","22380","Flagstaff","AZ","B01003_001",140217,NA
+"123","22420","Flint","MI","B01003_001",409361,NA
+"124","22500","Florence","SC","B01003_001",205814,NA
+"125","22520","Florence-Muscle Shoals","AL","B01003_001",147080,NA
+"126","22540","Fond du Lac","WI","B01003_001",102315,NA
+"127","22660","Fort Collins","CO","B01003_001",338161,NA
+"128","22900","Fort Smith","AR","B01003_001",281201,NA
+"129","23060","Fort Wayne","IN","B01003_001",431612,NA
+"130","23420","Fresno","CA","B01003_001",978130,NA
+"131","23460","Gadsden","AL","B01003_001",102939,NA
+"132","23540","Gainesville","FL","B01003_001",280763,NA
+"133","23580","Gainesville","GA","B01003_001",195961,NA
+"134","23900","Gettysburg","PA","B01003_001",102023,NA
+"135","24020","Glens Falls","NY","B01003_001",126308,NA
+"136","24140","Goldsboro","NC","B01003_001",124002,NA
+"137","24220","Grand Forks","ND","B01003_001",101991,NA
+"138","24260","Grand Island","NE","B01003_001",84729,NA
+"139","24300","Grand Junction","CO","B01003_001",149998,NA
+"140","24340","Grand Rapids-Wyoming","MI","B01003_001",1050440,NA
+"141","24420","Grants Pass","OR","B01003_001",85481,NA
+"142","24500","Great Falls","MT","B01003_001",81746,NA
+"143","24540","Greeley","CO","B01003_001",295123,NA
+"144","24580","Green Bay","WI","B01003_001",317702,NA
+"145","24660","Greensboro-High Point","NC","B01003_001",757810,NA
+"146","24780","Greenville","NC","B01003_001",177372,NA
+"147","24860","Greenville-Anderson-Mauldin","SC","B01003_001",883853,NA
+"148","25020","Guayama","PR","B01003_001",77151,NA
+"149","25060","Gulfport-Biloxi-Pascagoula","MS","B01003_001",391293,NA
+"150","25180","Hagerstown-Martinsburg","MD","B01003_001",263306,NA
+"151","25220","Hammond","LA","B01003_001",130504,NA
+"152","25260","Hanford-Corcoran","CA","B01003_001",150075,NA
+"153","25420","Harrisburg-Carlisle","PA","B01003_001",567872,NA
+"154","25500","Harrisonburg","VA","B01003_001",132835,NA
+"155","25540","Hartford-West Hartford-East Hartford","CT","B01003_001",1209367,NA
+"156","25620","Hattiesburg","MS","B01003_001",148768,NA
+"157","25860","Hickory-Lenoir-Morganton","NC","B01003_001",365339,NA
+"158","25940","Hilton Head Island-Bluffton-Beaufort","SC","B01003_001",210558,NA
+"159","25980","Hinesville","GA","B01003_001",80264,NA
+"160","26140","Homosassa Springs","FL","B01003_001",143087,NA
+"161","26300","Hot Springs","AR","B01003_001",98296,NA
+"162","26380","Houma-Thibodaux","LA","B01003_001",210801,NA
+"163","26420","Houston-The Woodlands-Sugar Land","TX","B01003_001",6779104,NA
+"164","26580","Huntington-Ashland","WV","B01003_001",358234,NA
+"165","26620","Huntsville","AL","B01003_001",450612,NA
+"166","26820","Idaho Falls","ID","B01003_001",142968,NA
+"167","26900","Indianapolis-Carmel-Anderson","IN","B01003_001",2007497,NA
+"168","26980","Iowa City","IA","B01003_001",169144,NA
+"169","27060","Ithaca","NY","B01003_001",102962,NA
+"170","27100","Jackson","MI","B01003_001",158913,NA
+"171","27140","Jackson","MS","B01003_001",580280,NA
+"172","27180","Jackson","TN","B01003_001",129331,NA
+"173","27260","Jacksonville","FL","B01003_001",1475386,NA
+"174","27340","Jacksonville","NC","B01003_001",193912,NA
+"175","27500","Janesville-Beloit","WI","B01003_001",161769,NA
+"176","27620","Jefferson City","MO","B01003_001",151157,NA
+"177","27740","Johnson City","TN","B01003_001",201226,NA
+"178","27780","Johnstown","PA","B01003_001",134550,NA
+"179","27860","Jonesboro","AR","B01003_001",129755,NA
+"180","27900","Joplin","MO","B01003_001",177440,NA
+"181","27980","Kahului-Wailuku-Lahaina","HI","B01003_001",165356,NA
+"182","28020","Kalamazoo-Portage","MI","B01003_001",336845,NA
+"183","28100","Kankakee","IL","B01003_001",111061,NA
+"184","28140","Kansas City","MO","B01003_001",2106632,NA
+"185","28420","Kennewick-Richland","WA","B01003_001",284828,NA
+"186","28660","Killeen-Temple","TX","B01003_001",438265,NA
+"187","28700","Kingsport-Bristol-Bristol","TN","B01003_001",306394,NA
+"188","28740","Kingston","NY","B01003_001",179303,NA
+"189","28940","Knoxville","TN","B01003_001",868499,NA
+"190","29020","Kokomo","IN","B01003_001",82387,NA
+"191","29100","La Crosse-Onalaska","WI","B01003_001",136513,NA
+"192","29180","Lafayette","LA","B01003_001",488969,NA
+"193","29200","Lafayette-West Lafayette","IN","B01003_001",217955,NA
+"194","29340","Lake Charles","LA","B01003_001",207050,NA
+"195","29420","Lake Havasu City-Kingman","AZ","B01003_001",206064,NA
+"196","29460","Lakeland-Winter Haven","FL","B01003_001",668671,NA
+"197","29540","Lancaster","PA","B01003_001",538347,NA
+"198","29620","Lansing-East Lansing","MI","B01003_001",476615,NA
+"199","29700","Laredo","TX","B01003_001",272053,NA
+"200","29740","Las Cruces","NM","B01003_001",215338,NA
+"201","29820","Las Vegas-Henderson-Paradise","NV","B01003_001",2141574,NA
+"202","29940","Lawrence","KS","B01003_001",119319,NA
+"203","30020","Lawton","OK","B01003_001",128490,NA
+"204","30140","Lebanon","PA","B01003_001",138674,NA
+"205","30300","Lewiston","ID","B01003_001",62492,NA
+"206","30340","Lewiston-Auburn","ME","B01003_001",107444,NA
+"207","30460","Lexington-Fayette","KY","B01003_001",506786,NA
+"208","30620","Lima","OH","B01003_001",103642,NA
+"209","30700","Lincoln","NE","B01003_001",327221,NA
+"210","30780","Little Rock-North Little Rock-Conway","AR","B01003_001",734502,NA
+"211","30860","Logan","UT","B01003_001",135615,NA
+"212","30980","Longview","TX","B01003_001",217858,NA
+"213","31020","Longview","WA","B01003_001",105112,NA
+"214","31080","Los Angeles-Long Beach-Anaheim","CA","B01003_001",13262234,NA
+"215","31140","Louisville/Jefferson County","KY","B01003_001",1285270,NA
+"216","31180","Lubbock","TX","B01003_001",313123,NA
+"217","31340","Lynchburg","VA","B01003_001",260668,NA
+"218","31420","Macon-Bibb County","GA","B01003_001",229676,NA
+"219","31460","Madera","CA","B01003_001",155013,NA
+"220","31540","Madison","WI","B01003_001",647281,NA
+"221","31700","Manchester-Nashua","NH","B01003_001",411087,NA
+"222","31740","Manhattan","KS","B01003_001",98841,NA
+"223","31860","Mankato-North Mankato","MN","B01003_001",100105,NA
+"224","31900","Mansfield","OH","B01003_001",121324,NA
+"225","32420","Mayagüez","PR","B01003_001",93435,NA
+"226","32580","McAllen-Edinburg-Mission","TX","B01003_001",849389,NA
+"227","32780","Medford","OR","B01003_001",214267,NA
+"228","32820","Memphis","TN","B01003_001",1345991,NA
+"229","32900","Merced","CA","B01003_001",269075,NA
+"230","33100","Miami-Fort Lauderdale-West Palm Beach","FL","B01003_001",6070944,NA
+"231","33140","Michigan City-La Porte","IN","B01003_001",110552,NA
+"232","33220","Midland","MI","B01003_001",83389,NA
+"233","33260","Midland","TX","B01003_001",169808,NA
+"234","33340","Milwaukee-Waukesha-West Allis","WI","B01003_001",1575907,NA
+"235","33460","Minneapolis-St. Paul-Bloomington","MN","B01003_001",3557528,NA
+"236","33540","Missoula","MT","B01003_001",115983,NA
+"237","33660","Mobile","AL","B01003_001",414659,NA
+"238","33700","Modesto","CA","B01003_001",539301,NA
+"239","33740","Monroe","LA","B01003_001",178550,NA
+"240","33780","Monroe","MI","B01003_001",149699,NA
+"241","33860","Montgomery","AL","B01003_001",373589,NA
+"242","34060","Morgantown","WV","B01003_001",139089,NA
+"243","34100","Morristown","TN","B01003_001",116987,NA
+"244","34580","Mount Vernon-Anacortes","WA","B01003_001",123907,NA
+"245","34620","Muncie","IN","B01003_001",115616,NA
+"246","34740","Muskegon","MI","B01003_001",173043,NA
+"247","34820","Myrtle Beach-Conway-North Myrtle Beach","SC","B01003_001",447775,NA
+"248","34900","Napa","CA","B01003_001",140530,NA
+"249","34940","Naples-Immokalee-Marco Island","FL","B01003_001",363922,NA
+"250","34980","Nashville-Davidson--Murfreesboro--Franklin","TN","B01003_001",1864138,NA
+"251","35100","New Bern","NC","B01003_001",125519,NA
+"252","35300","New Haven-Milford","CT","B01003_001",859339,NA
+"253","35380","New Orleans-Metairie","LA","B01003_001",1263635,NA
+"254","35620","New York-Newark-Jersey City","NY","B01003_001",19990592,NA
+"255","35660","Niles-Benton Harbor","MI","B01003_001",154807,NA
+"256","35840","North Port-Sarasota-Bradenton","FL","B01003_001",785997,NA
+"257","35980","Norwich-New London","CT","B01003_001",268881,NA
+"258","36100","Ocala","FL","B01003_001",348371,NA
+"259","36140","Ocean City","NJ","B01003_001",93705,NA
+"260","36220","Odessa","TX","B01003_001",158342,NA
+"261","36260","Ogden-Clearfield","UT","B01003_001",652744,NA
+"262","36420","Oklahoma City","OK","B01003_001",1369759,NA
+"263","36500","Olympia-Tumwater","WA","B01003_001",274684,NA
+"264","36540","Omaha-Council Bluffs","NE","B01003_001",922891,NA
+"265","36740","Orlando-Kissimmee-Sanford","FL","B01003_001",2450261,NA
+"266","36780","Oshkosh-Neenah","WI","B01003_001",169926,NA
+"267","36980","Owensboro","KY","B01003_001",117987,NA
+"268","37100","Oxnard-Thousand Oaks-Ventura","CA","B01003_001",848112,NA
+"269","37340","Palm Bay-Melbourne-Titusville","FL","B01003_001",576808,NA
+"270","37460","Panama City","FL","B01003_001",198537,NA
+"271","37620","Parkersburg-Vienna","WV","B01003_001",91353,NA
+"272","37860","Pensacola-Ferry Pass-Brent","FL","B01003_001",481964,NA
+"273","37900","Peoria","IL","B01003_001",374426,NA
+"274","37980","Philadelphia-Camden-Wilmington","PA","B01003_001",6069448,NA
+"275","38060","Phoenix-Mesa-Scottsdale","AZ","B01003_001",4673634,NA
+"276","38220","Pine Bluff","AR","B01003_001",92345,NA
+"277","38300","Pittsburgh","PA","B01003_001",2339941,NA
+"278","38340","Pittsfield","MA","B01003_001",127328,NA
+"279","38540","Pocatello","ID","B01003_001",85065,NA
+"280","38660","Ponce","PR","B01003_001",307093,NA
+"281","38860","Portland-South Portland","ME","B01003_001",529323,NA
+"282","38900","Portland-Vancouver-Hillsboro","OR","B01003_001",2417931,NA
+"283","38940","Port St. Lucie","FL","B01003_001",463172,NA
+"284","39140","Prescott","AZ","B01003_001",224645,NA
+"285","39300","Providence-Warwick","RI","B01003_001",1615516,NA
+"286","39340","Provo-Orem","UT","B01003_001",601388,NA
+"287","39380","Pueblo","CO","B01003_001",164685,NA
+"288","39460","Punta Gorda","FL","B01003_001",176954,NA
+"289","39540","Racine","WI","B01003_001",195398,NA
+"290","39580","Raleigh","NC","B01003_001",1302632,NA
+"291","39660","Rapid City","SD","B01003_001",145291,NA
+"292","39740","Reading","PA","B01003_001",416642,NA
+"293","39820","Redding","CA","B01003_001",179085,NA
+"294","39900","Reno","NV","B01003_001",454427,NA
+"295","40060","Richmond","VA","B01003_001",1281530,NA
+"296","40140","Riverside-San Bernardino-Ontario","CA","B01003_001",4518699,NA
+"297","40220","Roanoke","VA","B01003_001",313291,NA
+"298","40340","Rochester","MN","B01003_001",216035,NA
+"299","40380","Rochester","NY","B01003_001",1074667,NA
+"300","40420","Rockford","IL","B01003_001",339780,NA
+"301","40580","Rocky Mount","NC","B01003_001",147335,NA
+"302","40660","Rome","GA","B01003_001",96824,NA
+"303","40900","Sacramento--Roseville--Arden-Arcade","CA","B01003_001",2291738,NA
+"304","40980","Saginaw","MI","B01003_001",192778,NA
+"305","41060","St. Cloud","MN","B01003_001",196598,NA
+"306","41100","St. George","UT","B01003_001",160537,NA
+"307","41140","St. Joseph","MO","B01003_001",126779,NA
+"308","41180","St. Louis","MO","B01003_001",2805551,NA
+"309","41420","Salem","OR","B01003_001",416980,NA
+"310","41500","Salinas","CA","B01003_001",433212,NA
+"311","41540","Salisbury","MD","B01003_001",399013,NA
+"312","41620","Salt Lake City","UT","B01003_001",1185990,NA
+"313","41660","San Angelo","TX","B01003_001",118990,153
+"314","41700","San Antonio-New Braunfels","TX","B01003_001",2426204,NA
+"315","41740","San Diego-Carlsbad","CA","B01003_001",3302833,NA
+"316","41860","San Francisco-Oakland-Hayward","CA","B01003_001",4673221,NA
+"317","41900","San Germán","PR","B01003_001",127488,NA
+"318","41940","San Jose-Sunnyvale-Santa Clara","CA","B01003_001",1981616,NA
+"319","41980","San Juan-Carolina-Caguas","PR","B01003_001",2142392,NA
+"320","42020","San Luis Obispo-Paso Robles-Arroyo Grande","CA","B01003_001",281455,NA
+"321","42100","Santa Cruz-Watsonville","CA","B01003_001",273765,NA
+"322","42140","Santa Fe","NM","B01003_001",148917,NA
+"323","42200","Santa Maria-Santa Barbara","CA","B01003_001",443738,NA
+"324","42220","Santa Rosa","CA","B01003_001",501317,NA
+"325","42340","Savannah","GA","B01003_001",381623,NA
+"326","42540","Scranton--Wilkes-Barre--Hazleton","PA","B01003_001",556926,NA
+"327","42660","Seattle-Tacoma-Bellevue","WA","B01003_001",3809717,NA
+"328","42680","Sebastian-Vero Beach","FL","B01003_001",150984,NA
+"329","42700","Sebring","FL","B01003_001",102101,NA
+"330","43100","Sheboygan","WI","B01003_001",115205,NA
+"331","43300","Sherman-Denison","TX","B01003_001",128560,NA
+"332","43340","Shreveport-Bossier City","LA","B01003_001",441339,NA
+"333","43420","Sierra Vista-Douglas","AZ","B01003_001",126279,NA
+"334","43580","Sioux City","IA","B01003_001",168677,NA
+"335","43620","Sioux Falls","SD","B01003_001",255438,NA
+"336","43780","South Bend-Mishawaka","IN","B01003_001",320700,NA
+"337","43900","Spartanburg","SC","B01003_001",329839,NA
+"338","44060","Spokane-Spokane Valley","WA","B01003_001",555308,NA
+"339","44100","Springfield","IL","B01003_001",210028,NA
+"340","44140","Springfield","MA","B01003_001",630275,NA
+"341","44180","Springfield","MO","B01003_001",458834,NA
+"342","44220","Springfield","OH","B01003_001",135198,NA
+"343","44300","State College","PA","B01003_001",161443,NA
+"344","44420","Staunton-Waynesboro","VA","B01003_001",121079,NA
+"345","44700","Stockton-Lodi","CA","B01003_001",732212,NA
+"346","44940","Sumter","SC","B01003_001",106995,NA
+"347","45060","Syracuse","NY","B01003_001",654705,NA
+"348","45220","Tallahassee","FL","B01003_001",380101,NA
+"349","45300","Tampa-St. Petersburg-Clearwater","FL","B01003_001",3030047,NA
+"350","45460","Terre Haute","IN","B01003_001",170313,NA
+"351","45500","Texarkana","TX","B01003_001",150034,NA
+"352","45540","The Villages","FL","B01003_001",120999,NA
+"353","45780","Toledo","OH","B01003_001",604620,NA
+"354","45820","Topeka","KS","B01003_001",233260,NA
+"355","45940","Trenton","NJ","B01003_001",368762,NA
+"356","46060","Tucson","AZ","B01003_001",1019722,NA
+"357","46140","Tulsa","OK","B01003_001",985233,NA
+"358","46220","Tuscaloosa","AL","B01003_001",241398,NA
+"359","46300","Twin Falls","ID","B01003_001",107097,NA
+"360","46340","Tyler","TX","B01003_001",225015,NA
+"361","46520","Urban Honolulu","HI","B01003_001",987638,NA
+"362","46540","Utica-Rome","NY","B01003_001",293287,NA
+"363","46660","Valdosta","GA","B01003_001",144564,NA
+"364","46700","Vallejo-Fairfield","CA","B01003_001",438530,NA
+"365","47020","Victoria","TX","B01003_001",99501,NA
+"366","47220","Vineland-Bridgeton","NJ","B01003_001",153400,NA
+"367","47260","Virginia Beach-Norfolk-Newport News","VA","B01003_001",1722001,NA
+"368","47300","Visalia-Porterville","CA","B01003_001",460477,NA
+"369","47380","Waco","TX","B01003_001",265728,NA
+"370","47460","Walla Walla","WA","B01003_001",64237,NA
+"371","47580","Warner Robins","GA","B01003_001",189943,NA
+"372","47900","Washington-Arlington-Alexandria","DC","B01003_001",6138382,NA
+"373","47940","Waterloo-Cedar Falls","IA","B01003_001",170132,NA
+"374","48060","Watertown-Fort Drum","NY","B01003_001",114448,NA
+"375","48140","Wausau","WI","B01003_001",135264,NA
+"376","48260","Weirton-Steubenville","WV","B01003_001",119338,NA
+"377","48300","Wenatchee","WA","B01003_001",117128,NA
+"378","48540","Wheeling","WV","B01003_001",142664,NA
+"379","48620","Wichita","KS","B01003_001",643765,NA
+"380","48660","Wichita Falls","TX","B01003_001",150994,NA
+"381","48700","Williamsport","PA","B01003_001",114859,NA
+"382","48900","Wilmington","NC","B01003_001",283251,NA
+"383","49020","Winchester","VA","B01003_001",136305,NA
+"384","49180","Winston-Salem","NC","B01003_001",661798,NA
+"385","49340","Worcester","MA","B01003_001",938818,NA
+"386","49420","Yakima","WA","B01003_001",249325,NA
+"387","49620","York-Hanover","PA","B01003_001",444014,NA
+"388","49660","Youngstown-Warren-Boardman","OH","B01003_001",545488,NA
+"389","49700","Yuba City","CA","B01003_001",171365,NA
+"390","49740","Yuma","AZ","B01003_001",207829,NA
