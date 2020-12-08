@@ -10,7 +10,6 @@ library(emojifont)
 library(scales)
 
 
-
 transit <- read.csv("./data_for_viz/modes.csv") #mode share
 avo <- read.csv("./data_for_viz/avo.csv") #average vehicle occupancy
 grid <- read.csv("./data_for_viz/grid_renewable_prc.csv") #percent renewable energy on grid
@@ -53,7 +52,7 @@ pretty_df <- cbind(vars, pretty_names) %>% as.data.frame() %>% mutate(
 
 
 # Define server logic required to draw a histogram
-server <- function(input, output) {
+server <- function(input, output, session) {
   
     gs4_deauth()
     
@@ -92,7 +91,7 @@ server <- function(input, output) {
     df[,2:3] <- sapply(df[,2:3], as.character) #re-declare values as.numeric
     df[,4:11] <- sapply(df[,4:11], as.numeric) #re-declare values as.numeric
   
-    df <- df %>% pivot_longer(cols = viz_cols(), names_to = "metric", values_to = "percent") 
+    df <- df %>% pivot_longer(cols = viz_cols(), names_to = "metric", values_to = "percent") %>% arrange(pop)
     
     df <- df %>% left_join(pretty_df, by = c("metric" = "vars"))
     
@@ -104,7 +103,6 @@ server <- function(input, output) {
     df_user <- reactive ({ viz_df() %>% filter(state_abb == "UI")})
     df_benchmark <- reactive ({ 
       
- 
       if(is.null(input$benchmarks)) { models  <- viz_df() %>% filter(cbsa %in% "Boston-Cambridge-Newton") }
       if(!is.null(input$benchmarks)) { models  <- viz_df() %>% filter(cbsa %in% input$benchmarks) }
       return(models)
@@ -126,7 +124,9 @@ server <- function(input, output) {
     p <- ggplot(viz_df() %>% filter(state_abb != "PAST" & state_abb != "UI") %>% arrange(cbsa), aes(alpha = 0.3, x = pretty_names, size = pop, y = percent, colour = pretty_names, 
                                                                                   weight = 2)) +
             ylim(0, 100) + xlab(NULL) + ylab("%") +
-            theme(legend.title = element_blank(), axis.text.x = element_blank()) +
+            theme(legend.title = element_blank(),  
+                  axis.text.x = element_text(pretty_names, angle = 30, vjust = 0.5, hjust=1),
+                  legend.position = "bottom") +
             scale_fill_discrete(labels = pretty_names) +
             scale_colour_discrete(labels = pretty_names) +
             scale_size_continuous(name = "Population", range = c(min(df$pop)/scale_factor, max(df$pop)/scale_factor), breaks = 5) 
@@ -141,26 +141,34 @@ server <- function(input, output) {
     if (input$model) {
       p <- p + geom_jitter(data = df_benchmark(), alpha = 0.5, width = 0, color = "navyblue", aes(x = pretty_names, y = percent, size = pop, fill = pretty_names,
                                               text = paste("<b>",cbsa,"</b>", "<br>","Pop:",format(pop,big.mark=",",scientific=FALSE),"<br>", pretty_names, round(percent, 2)))) 
-                                        
+
     }
     
     
     if (input$past) {
        
-      p <- p + geom_jitter(data = df_past() %>% arrange(cbsa), width = 0, alpha = 1.0, color = "yellow", size = 2, weight = 5, shape = 18, 
+      p <- p + geom_jitter(data = df_past() %>% arrange(cbsa), width = 0, alpha = 1.0, color = "yellow", size = 2, shape = 18, 
                            aes(text = paste("<b>", "Past User", "</b>","<br>", pretty_names, round(percent, 2)))) 
       
     }
     
     if (input$user) {
-      p <- p + geom_jitter(data = df_user() %>% arrange(cbsa) , width = 0, alpha = 1.0, color = "gray34", size = 5, weight = 5, shape = 18, 
+      p <- p + geom_jitter(data = df_user() %>% arrange(cbsa) , width = 0, alpha = 1.0, color = "gray34", size = 5, shape = 18, 
                            aes(text = paste("<b> User Input </b>", "<br>", pretty_names, round(percent, 2)))) 
+        
     }
    
 
-    fancy <- ggplotly(p, tooltip = c("text"))   
+    fancy <- ggplotly(p, tooltip = c("text")) %>% layout(legend = list(orientation = 'l'))   
     
-    return(fancy)
+    for (i in 1:length(fancy$x$data)){ ##remove [,1] from plotly legend output
+      if (!is.null(fancy$x$data[[i]]$name)){
+        fancy$x$data[[i]]$name =  gsub("\\(","",str_split(fancy$x$data[[i]]$name,",")[[1]][1])
+      }
+    }
+    
+    
+    return(fancy) %>% layout(showlegend = FALSE)
     
     })
     
@@ -202,6 +210,7 @@ server <- function(input, output) {
       return(city_data)
         
     }, options = list(dom = 't'))
+    
 }
 
 
@@ -214,11 +223,13 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                       column(width = 4,
                                              wellPanel(
                                                  p(h4("Instructions")),
+                                                 p("This tool helps display your mix of decarbonization strategies, and compare them to the status quo in U.S. cities, as well as the strategies created by other workshop participants."), 
+                                                 p("Mouse over the plot for details, and enter your results on the", em("Submit Your Results"), "page."),
                                                  selectizeInput('benchmarks', label = em("1. Select Benchmark Cities"), choices = unique(df$cbsa), selected = "Boston-Cambridge-Newton", multiple = TRUE),
-                                                 selectizeInput('metrics', label = em("2. Select Metrics"), choices =  pretty_df$pretty_names, selected = pretty_df$pretty_names[1:5], 
+                                                 selectizeInput('metrics', label = em("2. Select Metrics"), choices =  pretty_df$pretty_names, selected = pretty_df$pretty_names[1:5], options = list(maxItems = 7), 
                                                                 multiple = TRUE),
                                                  
-                                                 p(em(strong("3. Enter your output values"))),
+                                                 p(em(strong("3. Enter your values (default are U.S. averages)."))),
                                                  
                                                  fluidRow(
                                                  
@@ -230,34 +241,36 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                    column(6, 
                                                           numericInput('carpool_wrk_pct', label = "Commuting by Carpool", min = 0, max = 100, value = round(mean(df$carpool_wrk_prc), 2), step = 5),
                                                           numericInput('dens_enough', label = "% Area with Transit Supportive Density", min = 0, max = 100, value = round(mean(df$dens_enough), 2),  step = 5),
-                                                          numericInput('ren_prc', label = "Grid Renewable %", min = 0, max = 100, value = round(mean(df$dens_enough), 2),  step = 5) #,
-                                                          #actionButton('refresh', label = em("4. Update Chart"))
+                                                          numericInput('ren_prc', label = "Grid Renewable %", min = 0, max = 100, value = round(mean(df$dens_enough), 2),  step = 5), 
+                                                          p(em("Data Sources: National Household Travel Survey (2017), ACS 5-year Survey, Energy Information Administration"), style = "font-size:80%")
                                                           )
                                                  ),
-                                                 
-                                                 fluidRow( 
-                                      
-                                                 column(12, 
-                                                 strong('Select Layers'),
-                                                 
-                                                 checkboxInput('cities', label = "All Cities", value = TRUE),
-                                                 checkboxInput('model', label = "Benchmarks", value = TRUE),
-                                                 checkboxInput('user', label = "User Values", value = TRUE),
-                                                 checkboxInput('past', label = "Past User Values", value = FALSE)
-                                                 )
-                                             )   
+                                              
+                                                
                                           )
                                       ),
                                       
                                       column(width = 8,
                                              
                                              fluidRow(
-                                             plotlyOutput('plot')
+                                             column(width = 10, plotlyOutput('plot')),
+                                             column(width = 2, absolutePanel(top = "20px", right = "20px", bottom = "auto", left = "auto", draggable = TRUE, height = "auto",
+                                                                             width = "120px",
+                                                                             
+                                                                             strong('Select Layers'),
+                                                                             
+                                                                             checkboxInput('cities', label = "All Cities", value = TRUE),
+                                                                             checkboxInput('model', label = p(fa("circle", fill = "blue"), "Benchmarks",  value = TRUE)),
+                                                                             checkboxInput('user', label = p(fa("square", fill = "gray34"), "Input Values", value = TRUE)),
+                                                                             checkboxInput('past', label = p(fa("square", fill = "yellow"), "Past User Values", value = FALSE))
+                                                      ))             
                                              ),
                                              
                                              fluidRow(
                                                  wellPanel(DT::dataTableOutput('stats'))
-                                             )
+                                             ),
+                                             
+                                          
                                       )
                                       
                                   )
