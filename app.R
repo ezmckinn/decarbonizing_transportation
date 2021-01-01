@@ -9,6 +9,7 @@ library(fontawesome)
 library(emojifont)
 library(scales)
 
+setwd("/Users/emmettmckinney/Documents/CodeAcademy/Decarbonizing_Transport/Decarbonizing_Transport/shiny_app")
 
 transit <- read.csv("./data_for_viz/modes.csv") #mode share
 avo <- read.csv("./data_for_viz/avo.csv") #average vehicle occupancy
@@ -18,6 +19,7 @@ density <- read.csv("./data_for_viz/density.csv")
 work_home <- read.csv("./data_for_viz/work_home.csv")
 carpool <- read.csv("./data_for_viz/carpool_work.csv")
 cbsa_pop <- read.csv("./data_for_viz/cbsa_pop.csv")
+density_change <- read.csv("./data_for_viz/density_change.csv")
 
 transit <- transit %>% mutate(green_modes = subway + commuter_rail + public_bus + walk + bicycle)
 
@@ -29,6 +31,8 @@ grid_cols <- grid %>% select(cbsa, state_abb, ren_prc) #% of consumption that is
 ev_prc_cols <- ev_prc %>% select(cbsa, state_abb, elec_n_hyb) #% of trips made in electric & hybrid cars
 density_cols <- density %>% select(cbsa, state_abb, dens_enough) #% of census tracts above 10k people / sq mile
 work_home_cols <- work_home %>% select(cbsa, state_abb, work_home_pct) #% of census tracts above 10k people / sq mile
+density_change_cols <- density_change %>% select(cbsa, state_abb, HU_dens_inc_prc) # %increase in density of housing units per square mile from 2009-2018 
+
 
 df <- cbsa_cols %>% 
     left_join(transit_cols, by = c("cbsa","state_abb")) %>%
@@ -38,18 +42,21 @@ df <- cbsa_cols %>%
     left_join(ev_prc_cols, by = c("cbsa", "state_abb")) %>%
     left_join(work_home_cols, by = c("cbsa", "state_abb")) %>%
     left_join(density_cols, by = c("cbsa", "state_abb")) %>%
-    filter(cbsa != "All" & cbsa != "Suppressed") %>% drop_na()
+    left_join(density_change_cols, by = c("cbsa","state_abb")) %>%
+    filter(cbsa != "All" & cbsa != "Suppressed") %>% drop_na() %>% 
+    mutate(workshop_id = "NA")
 
 
 ##idea — define data frame that switches between var name and pretty name
 
-vars <- c("green_modes","mean_avo","ren_prc","elec_n_hyb","dens_enough","work_home_pct","carpool_wrk_prc")
-pretty_names <- c("Sustainable Modes","Avg. Vehicle Occ.","% Grid Renewables","% Fleet EVs","% Dens Enough","% Telecommute","% Carpool Pct.")
+vars <- c("green_modes","mean_avo","ren_prc","elec_n_hyb","dens_enough","work_home_pct","carpool_wrk_prc","HU_dens_inc_prc")
+pretty_names <- c("Sustainable Modes","Avg. Vehicle Occ.","% Grid Renewables","% Fleet EVs","% Dense Enough for Transit","% Telecommute","% Carpool Pct.","10 year % Increase in Housing Density")
 pretty_df <- cbind(vars, pretty_names) %>% as.data.frame() %>% mutate(
-  icons = fontawesome(c('fa-leaf','fa-car','fa-bolt','fa-plug','fa-building','fa-laptop','fa-user')) #fontawesome names
+  icons = fontawesome(c('fa-leaf','fa-car','fa-bolt','fa-plug','fa-building','fa-laptop','fa-user','fa-building')) #fontawesome names
 )
 
 
+workshops <- c("All", "MIT","Cambridge","New York City","Stockholm","Los Angeles","Montreal")
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
@@ -58,16 +65,16 @@ server <- function(input, output, session) {
     
     values <- reactiveValues(plot = NULL)
     
-    past_users <- read_sheet(
-        ss = "https://docs.google.com/spreadsheets/d/1-2GqMyAq7vuzPNIJVVapjWg5B7AYnNMuX6VMNFc7E1s/edit#gid=2068996923",
-        range = "Shiny_App_Input!B1:J501",
-        col_names = TRUE,
-        trim_ws = TRUE
-    ) %>%  mutate(cbsa = "Past User", state_abb = "PAST") %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% drop_na()
-    
-#past_users <- read.csv("/Users/emmettmckinney/Documents/CodeAcademy/Decarbonizing_Transport/Decarbonizing_Transport/shiny_app/data_for_viz/dev_data.csv", header = TRUE) %>% 
- # mutate(cbsa = "Past User", state_abb = "PAST") %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% drop_na()
-        ##order so that Google Sheet values mirror spreadsheet, add in columns from population / CBSA sheet
+#   past_users <- read_sheet(
+#      ss = "https://docs.google.com/spreadsheets/d/1-2GqMyAq7vuzPNIJVVapjWg5B7AYnNMuX6VMNFc7E1s/edit#gid=2068996923",
+#      range = "Shiny_App_Input!B1:L501",
+#      col_names = TRUE,
+#      trim_ws = TRUE
+#    ) %>% mutate(cbsa = "Past User", state_abb = "PAST") %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% drop_na()
+  
+past_users <- read.csv("./data_for_viz/dev_data.csv", header = TRUE) %>% 
+  mutate(cbsa = "Past User", state_abb = "PAST") %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% drop_na()
+     #   order so that Google Sheet values mirror spreadsheet, add in columns from population / CBSA sheet
     
     viz_cols <- reactive({ 
       
@@ -80,22 +87,30 @@ server <- function(input, output, session) {
     model_cbsa <- reactive({ return(input$benchmarks)
       })
     
-    user_vals <- reactive ({ c(99999,"User Input","UI",1000,input$transit,input$carpool_wrk_pct,input$mean_avo,input$ren_prc,input$elec_n_hyb,input$work_home_pct,input$dens_enough) }) #KEEP THESE IN SAME ORDER AS JOIN
+    user_vals <- reactive ({ c(99999,"User Input","UI",1000,input$transit,input$carpool_wrk_pct,
+                               input$mean_avo,input$ren_prc,input$elec_n_hyb,input$work_home_pct,
+                               input$dens_enough,input$housing, input$workshop) }) #KEEP THESE IN SAME ORDER AS JOIN
+    
+    observe({ 
+    print(ncol(df))
+    print(ncol(user_vals()))
+    print(ncol(past_users))
+    })
     
     viz_df <- eventReactive(c(input$transit,input$carpool_wrk_pct,input$mean_avo,input$ren_prc,input$elec_n_hyb,input$work_home_pct,input$dens_enough, input$metrics), { 
         
-    df <- df %>% rbind(user_vals())  %>% rbind(past_users)
+    df <- df %>% rbind(user_vals()) %>% rbind(past_users)
 
     #append user values to prepped data frame 
-    df[,1] <- sapply(df[,1], as.numeric) #re-declare values as.numeric
-    df[,2:3] <- sapply(df[,2:3], as.character) #re-declare values as.numeric
-    df[,4:11] <- sapply(df[,4:11], as.numeric) #re-declare values as.numeric
+    df[,1] <- sapply(df[,1], as.numeric) 
+    df[,2:3] <- sapply(df[,2:3], as.character) 
+    df[,4:12] <- sapply(df[,4:12], as.numeric) 
+    df[,13] <- sapply(df[,13], as.character) 
   
     df <- df %>% pivot_longer(cols = viz_cols(), names_to = "metric", values_to = "percent") %>% arrange(pop)
     
     df <- df %>% left_join(pretty_df, by = c("metric" = "vars"))
     
-    print(head(df))
     return(df)
     
     }, ignoreNULL = FALSE) 
@@ -108,9 +123,18 @@ server <- function(input, output, session) {
       return(models)
       
       })
-    df_past <- reactive ({ viz_df() %>% filter(cbsa == "Past User")})
+    df_past <- reactive ({ 
+      
+      if(input$workshop == "All") { viz <- viz_df() %>% filter(cbsa == "Past User") }
+      if(input$workshop != "All") { viz <- viz_df() %>% filter(cbsa == "Past User", workshop_id == input$workshop)}
+      
+      return(viz)
+      
+      })
     
-    observeEvent(model_cbsa, {print(model_cbsa())})
+    output$ws_filter <- renderUI({
+      
+    })
     
     output$plot <- renderPlotly({
       
@@ -153,7 +177,7 @@ server <- function(input, output, session) {
     }
     
     if (input$user) {
-      p <- p + geom_jitter(data = df_user() %>% arrange(cbsa) , width = 0, alpha = 1.0, color = "gray34", size = 5, shape = 18, 
+      p <- p + geom_jitter(data = df_user() %>% arrange(cbsa) , width = 0, alpha = 1.0, color = "gray34", size = 3, shape = 18, 
                            aes(text = paste("<b> User Input </b>", "<br>", pretty_names, round(percent, 2)))) 
         
     }
@@ -205,7 +229,7 @@ server <- function(input, output, session) {
       city_data <- city_data %>% mutate(across(where(is.numeric), round, 2))
       
       colnames(city_data)[2:4] <- c("City","State","Population")
-      colnames(city_data)[5:11] <- pretty_df$pretty_names[match(names(city_data[5:11]),pretty_df$vars)]
+      colnames(city_data)[5:12] <- pretty_df$pretty_names[match(names(city_data[5:11]),pretty_df$vars)]
       
       return(city_data)
         
@@ -226,7 +250,7 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                  p("This tool helps display your mix of decarbonization strategies, and compare them to the status quo in U.S. cities, as well as the strategies created by other workshop participants."), 
                                                  p("Mouse over the plot for details, and enter your results on the", em("Submit Your Results"), "page."),
                                                  selectizeInput('benchmarks', label = em("1. Select Benchmark Cities"), choices = unique(df$cbsa), selected = "Boston-Cambridge-Newton", multiple = TRUE),
-                                                 selectizeInput('metrics', label = em("2. Select Metrics"), choices =  pretty_df$pretty_names, selected = pretty_df$pretty_names[1:5], options = list(maxItems = 7), 
+                                                 selectizeInput('metrics', label = em("2. Select Metrics"), choices =  pretty_df$pretty_names, selected = pretty_df$pretty_names[1:5], options = list(maxItems = 8), 
                                                                 multiple = TRUE),
                                                  
                                                  p(em(strong("3. Enter your values (default are U.S. averages)."))),
@@ -242,7 +266,8 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                           numericInput('carpool_wrk_pct', label = "Commuting by Carpool", min = 0, max = 100, value = round(mean(df$carpool_wrk_prc), 2), step = 5),
                                                           numericInput('dens_enough', label = "% Area with Transit Supportive Density", min = 0, max = 100, value = round(mean(df$dens_enough), 2),  step = 5),
                                                           numericInput('ren_prc', label = "Grid Renewable %", min = 0, max = 100, value = round(mean(df$dens_enough), 2),  step = 5), 
-                                                          p(em("Data Sources: National Household Travel Survey (2017), ACS 5-year Survey, Energy Information Administration"), style = "font-size:80%")
+                                                          numericInput('housing', label = "10-year % Density Increase", min = 0, max = 100, value = round(mean(df$HU_dens_inc_prc), 2),  step = 1)
+                                                          #p(em("Data Sources: National Household Travel Survey (2017), ACS 5-year Survey, Energy Information Administration"), style = "font-size:80%")
                                                           )
                                                  ),
                                               
@@ -262,7 +287,8 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                                              checkboxInput('cities', label = "All Cities", value = TRUE),
                                                                              checkboxInput('model', label = p(fa("circle", fill = "blue"), "Benchmarks",  value = TRUE)),
                                                                              checkboxInput('user', label = p(fa("square", fill = "gray34"), "Input Values", value = TRUE)),
-                                                                             checkboxInput('past', label = p(fa("square", fill = "yellow"), "Past User Values", value = FALSE))
+                                                                             checkboxInput('past', label = p(fa("square", fill = "yellow"), "Past User Values", value = FALSE)),
+                                                                             selectizeInput('workshop', label = p(strong("Select Workshop")), choices = workshops, selected = "All")
                                                       ))             
                                              ),
                                              
