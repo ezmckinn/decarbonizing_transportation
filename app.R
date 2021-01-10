@@ -49,7 +49,7 @@ df <- cbsa_cols %>%
 
 vars <- c("green_modes","mean_avo","ren_prc","elec_n_hyb","dens_enough","work_home_pct","carpool_wrk_prc","HU_dens_inc_prc")
 icons <- c("/custom_icons/bus-circle.png", "/custom_icons/carpool-circle.png", "/custom_icons/bolt-circle.png", "/custom_icons/plug-circle.png", "/custom_icons/house-laptop-circle.png", "/custom_icons/house-laptop-circle.png", "/custom_icons/carpool-circle.png", "/custom_icons/leaf-circle.png") ## change these later but will work for now
-pretty_names <- c("Sustainable Modes","Avg. Vehicle Occ.","% Grid Renewables","% Fleet EVs","% Dense Enough for Transit","% Telecommute","% Carpool Pct.","10 year % Increase in Housing Density")
+pretty_names <- c("Low-Carbon Mode Share","Avg. Vehicle Occ.","Renewable Energy Share","Electric & Hybrid Veh. Mode Share","% Dense Enough for Transit","Telecommute %","Carpool Mode Share","10 year % Increase in Housing Density")
 pretty_df <- cbind(vars, pretty_names) %>% as.data.frame() %>% mutate(icons = paste0(getwd(),icons)) 
 pretty_df$id <- 1:nrow(pretty_df)
 
@@ -62,13 +62,13 @@ past_users <- read_sheet(
   range = "Shiny_App_Input!B1:M501",
   col_names = TRUE,
   trim_ws = TRUE
-) %>% mutate(cbsa = "Past User", state_abb = "PAST") %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% select(-HU_dens_inc_prc) %>% drop_na()
+) %>% mutate(cbsa = "Past User", state_abb = "PAST", dens_enough = 0) %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% select(-HU_dens_inc_prc) %>% drop_na()
 
 
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   
-   
+
 #past_users <- read.csv("./data_for_viz/dev_data.csv", header = TRUE) %>% 
 #  mutate(cbsa = "Past User", state_abb = "PAST") %>% relocate (c(GEOID, cbsa, state_abb), .before = everything()) %>% drop_na()
      #   order so that Google Sheet values mirror spreadsheet, add in columns from population / CBSA sheet
@@ -99,6 +99,10 @@ server <- function(input, output, session) {
     
     viz_df <- eventReactive(c(input$green_modes,input$carpool_wrk_pct,input$mean_avo,input$ren_prc,input$elec_n_hyb,input$work_home_pct,input$dens_enough, input$metrics, input$nickname, input$workshop), { 
     
+      validate(
+        need(input$metrics != "", "Please select at least one variable to display!")
+      )
+      
       #append user values to prepped data frame     
     df <- df %>% rbind(user_vals()) %>% rbind(past_users)
 
@@ -117,8 +121,6 @@ server <- function(input, output, session) {
     #create new column that's the same as the percent, but with unique values for vehicle occupancy. Decouple label from position.
     df$label <- df$percent #store most percentages as the labels
     df$percent[df$pretty_names == "Avg. Vehicle Occ."] <- (100/df$percent) #create percentage column for position.
-    
-    print(head(df %>% filter(pretty_names == "% Telecommute"), 10))
     
     return(df)
     
@@ -149,8 +151,6 @@ server <- function(input, output, session) {
     
     ## SET UP LAYER TOGGLES
   
-    ## Steps to Fix Icons: (1) Add index number for each metric in input df (2) reorder metrics according to this index number (3) use this to set position of image
-    
     color_scale <- c("#7fc97f","#beaed4","#fdc086","#ffff99","#386cb0","#f0027f","#bf5b17")
     
     p <- ggplot(viz_df() %>% filter(state_abb != "PAST" & state_abb != "UI") %>% arrange(cbsa), aes(alpha = 0.3, x = pretty_names, size = pop, y = percent, colour = pretty_names, label = icons,
@@ -163,17 +163,17 @@ server <- function(input, output, session) {
             scale_fill_discrete(labels = pretty_names) +
             scale_colour_discrete(labels = pretty_names) +
             scale_size_continuous(name = "Population", range = c(min(df$pop)/scale_factor, max(df$pop)/scale_factor), breaks = 5) 
-   
+  
     if (input$cities) {
       p <- p + geom_jitter(data = viz_df() %>% filter(cbsa != "User Input" & cbsa != "Past User") %>% arrange(cbsa), width = 0, alpha = 0.3, aes(color = pretty_names, alpha = 0.3,
-                                                    text = paste("<b>",cbsa,"</b>", "<br>","Pop:",format(pop,big.mark=",",scientific=FALSE),"<br>", pretty_names, round(label, 2)))) 
+                                                    text = paste("<b>",cbsa,"</b>", "<br>","Pop:",format(pop,big.mark=",",scientific=FALSE),"<br>", pretty_names, ":", round(label, 2)))) 
         
       
     }
     
     if (input$model) {
       p <- p + geom_jitter(data = df_benchmark(), alpha = 0.5, width = 0, color = "navyblue", aes(x = pretty_names, y = percent, size = pop, fill = pretty_names,
-                                              text = paste("<b>",cbsa,"</b>", "<br>","Pop:",format(pop,big.mark=",",scientific=FALSE),"<br>", pretty_names, round(label, 2)))) 
+                                              text = paste("<b>",cbsa,"</b>", "<br>","Pop:",format(pop,big.mark=",",scientific=FALSE),"<br>", pretty_names, ":", round(label, 2)))) 
 
     }
     
@@ -184,11 +184,6 @@ server <- function(input, output, session) {
                            aes(text = paste("<b>", "Scenario:", scenario_name, "</b>","<br>", pretty_names,":", round(label, 2), "%"))) 
       
     }
-    
-   # if (input$user) {
-   #    p <- p + geom_jitter(data = df_user(), aes(x = pretty_names, y = percent, text = paste("<b> User Input </b>", "<br>", pretty_names, round(label, 2))), size = 2, width = 0)
-  #    
-  #  }
    
     fancy <- ggplotly(p, tooltip = c("text")) %>% add_lines(x=~2:2, y=~0:2, colors=NULL, width = 0, yaxis= "y2", 
                                                             data=viz_df(),
@@ -201,7 +196,7 @@ server <- function(input, output, session) {
                                                                     overlaying = "y",
                                                                     nticks = 2,
                                                                     side = "right",
-                                                                    title = "Average Vehicle Occupancy (#)"
+                                                                    title = "Avg. Veh. Occ. (#)"
                                                                   ),
                                                                   
                                                                   margin = list(r = 11))
@@ -234,12 +229,12 @@ server <- function(input, output, session) {
           list(
           
           list(
-          source = base64enc::dataURI(file = icon_df$icons[pretty_names == "% Grid Renewables"]),
-          x = icon_df$x_pos[pretty_names == "% Grid Renewables"], y = (input$ren_prc * .01),
+          source = base64enc::dataURI(file = icon_df$icons[pretty_names == "Renewable Energy Share"]),
+          x = icon_df$x_pos[pretty_names == "Renewable Energy Share"], y = (input$ren_prc * .01),
           sizex = 0.2, sizey = 0.1,
           xref = "x", yref = "paper", 
           xanchor = "center", yanchor = "bottom",
-          visible = icon_df$viz_switch[pretty_names == "% Grid Renewables"]
+          visible = icon_df$viz_switch[pretty_names == "Renewable Energy Share"]
           ),
           
           list(
@@ -252,43 +247,43 @@ server <- function(input, output, session) {
           ),
           
           list(
-            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "Sustainable Modes"]),
-            x = icon_df$x_pos[pretty_names == "Sustainable Modes"], 
+            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "Low-Carbon Mode Share"]),
+            x = icon_df$x_pos[pretty_names == "Low-Carbon Mode Share"], 
             y = (input$green_modes * .01),
             sizex = 0.2, sizey = 0.1,
             xref = "x", yref = "paper", 
             xanchor = "center", yanchor = "bottom",
-            visible = icon_df$viz_switch[pretty_names == "Sustainable Modes"]
+            visible = icon_df$viz_switch[pretty_names == "Low-Carbon Mode Share"]
           ),
           
           list(
-            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "% Fleet EVs"]),
-            x = icon_df$x_pos[pretty_names == "% Fleet EVs"], 
+            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "Electric & Hybrid Veh. Mode Share"]),
+            x = icon_df$x_pos[pretty_names == "Electric & Hybrid Veh. Mode Share"], 
             y = (input$elec_n_hyb * .01),
             sizex = 0.2, sizey = 0.1,
             xref = "x", yref = "paper", 
             xanchor = "center", yanchor = "bottom",
-            visible = icon_df$viz_switch[pretty_names == "% Fleet EVs"]
+            visible = icon_df$viz_switch[pretty_names == "Electric & Hybrid Veh. Mode Share"]
           ),
           
           list(
-            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "% Telecommute"]),
-            x = icon_df$x_pos[pretty_names == "% Telecommute"], 
+            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "Telecommute %"]),
+            x = icon_df$x_pos[pretty_names == "Telecommute %"], 
             y = (input$work_home_pct * .01),
             sizex = 0.2, sizey = 0.1,
             xref = "x", yref = "paper", 
             xanchor = "center", yanchor = "bottom",
-            visible = icon_df$viz_switch[pretty_names == "% Telecommute"]
+            visible = icon_df$viz_switch[pretty_names == "Telecommute %"]
           ),
           
           list(
-            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "% Carpool Pct."]),
-            x = icon_df$x_pos[pretty_names == "% Carpool Pct."], 
+            source = base64enc::dataURI(file = icon_df$icons[pretty_names == "Carpool Mode Share"]),
+            x = icon_df$x_pos[pretty_names == "Carpool Mode Share"], 
             y = (input$carpool_wrk_prc * .01),
             sizex = 0.2, sizey = 0.1,
             xref = "x", yref = "paper", 
             xanchor = "center", yanchor = "bottom",
-            visible = icon_df$viz_switch[pretty_names == "% Carpool Pct."]
+            visible = icon_df$viz_switch[pretty_names == "Carpool Mode Share"]
           )
           ),
         
@@ -297,6 +292,8 @@ server <- function(input, output, session) {
      
     }
   
+    if(is.null(input$metrics)) { fancy <- renderPrint("Please select at least one metric.")}
+    
   return(fancy) 
 
     })
@@ -304,17 +301,16 @@ server <- function(input, output, session) {
     
     stat_table <- reactive ({ 
       
-      print(head(viz_df()$work_home_pct, 10))
-      
-      a <- viz_df() %>% group_by(metric) %>% 
+      a <- viz_df() %>% filter(state_abb != "UI") %>%
+        group_by(metric) %>% 
         summarise( 
-            min = min(percent, na.rm = TRUE), 
-            q25 = quantile(percent, 0.25, na.rm = TRUE), 
-            median = median(percent, na.rm = TRUE), 
-            q75 = quantile(percent, 0.75, na.rm = TRUE), 
-            max = max(percent, na.rm = TRUE),
-            mean = mean(percent, na.rm = TRUE), 
-            sd = sd(percent, na.rm = TRUE))
+            min = min(label, na.rm = TRUE), 
+            q25 = quantile(label, 0.25, na.rm = TRUE), 
+            median = median(label, na.rm = TRUE), 
+            q75 = quantile(label, 0.75, na.rm = TRUE), 
+            max = max(label, na.rm = TRUE),
+            mean = mean(label, na.rm = TRUE), 
+            sd = sd(label, na.rm = TRUE))
       
       return(a) })
     
@@ -336,12 +332,12 @@ server <- function(input, output, session) {
     
     output$city_data <- DT::renderDataTable({
       
-      city_data <- as.tibble(df) %>% select(-c("scenario_name","workshop_id"))
+      city_data <- as.tibble(df) %>% select(-c("scenario_name","workshop_id", "dens_enough"))
       
       city_data <- city_data %>% mutate(across(where(is.numeric), round, 2))
       
       colnames(city_data)[2:4] <- c("City","State","Population")
-      colnames(city_data)[5:11] <- pretty_df$pretty_names[match(names(city_data[5:11]),pretty_df$vars)]
+      colnames(city_data)[5:10] <- pretty_df$pretty_names[match(names(city_data[5:10]),pretty_df$vars)]
       
       return(city_data)
         
@@ -363,7 +359,7 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                  p("Mouse over the plot for details, and enter your results on the", em("Submit Your Results"), "page."),
                                                  selectizeInput('benchmarks', label = em("1. Select Benchmark Cities"), choices = unique(df$cbsa), selected = "Boston-Cambridge-Newton", multiple = TRUE),
                                                  selectizeInput('metrics', label = em("2. Select Metrics"), choices =  pretty_df$pretty_names[!grepl("Dens", pretty_names)],  ## taking out density metrics.
-                                                                selected = c("Sustainable Modes","Avg. Vehicle Occ.","% Grid Renewables","% Fleet EVs","% Carpool Pct.","% Telecommute"),
+                                                                selected = c("Low-Carbon Mode Share","Avg. Vehicle Occ.","Renewable Energy Share","Electric & Hybrid Veh. Mode Share","Carpool Mode Share","Telecommute %"),
                                                                 options = list(maxItems = 8), 
                                                                 multiple = TRUE),
                                                  
@@ -386,20 +382,23 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                           p(em("Data Sources: National Household Travel Survey (2017), ACS 5-year Survey, Energy Information Administration"), style = "font-size:80%")
                                                           )
                                                  ),
+                                             )
                                               
-                                                
-                                          )
                                       ),
                                       
                                       column(width = 8,
                                              
                                              fluidRow(
+                                               
+                                              # if (is.null(input$metrics)) { a <- strong("Please choose at least one metric.") }
+                                              # if (!is.null(input$metrics)) { a <- plotlyOutput('plot') }
+                                               
                                              column(width = 10, plotlyOutput('plot')),
                                              column(width = 2, absolutePanel(top = "20px", right = "20px", bottom = "auto", left = "auto", draggable = TRUE, height = "auto",
                                                                              width = "120px",
                                                                              
                                                                              strong('Select Layers'),
-                                                                             
+                                    
                                                                              checkboxInput('cities', label = p(img(src='green-bubbles.png', align = "left", height = 18, width= 18, style = "margin:5px"), "All Cities"), value = TRUE),
                                                                              checkboxInput('model', label =  p(img(src='empty-circle.png', align = "left", height = 18, width= 18, style = "margin:5px"), "Model Cities"),  value = TRUE), #fa("circle", fill = "blue"), 
                                                                              checkboxInput('user', label = p(img(src='bus-circle.png', align = "left", height = 18, width= 18, style = "margin:5px"), "Input Values"), value = TRUE), #fa("square", fill = "gray34")
@@ -407,14 +406,9 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                                                              selectizeInput('workshop', label = p(strong("Select Workshop")), choices = c(past_users$workshop_id, "All"), selected = "All")
                                                       ))             
                                              ),
-                                             
-                                             fluidRow(
-                                                 wellPanel(DT::dataTableOutput('stats'))
-                                             ),
-                                             
-                                          
+                                            
+                                             fluidRow(wellPanel(DT::dataTableOutput('stats'))),
                                       )
-                                      
                                   )
                                   
                          ),
@@ -435,18 +429,41 @@ ui <- shinyUI(navbarPage("Decarbonizing Transport", theme = shinytheme("flatly")
                                   
                                   ),
                          tabPanel('The Data',
-                                  DT::dataTableOutput('city_data'),
-                                  p("Transportaion data are taken from the", a("National Household Travel Survey", href = "https://nhts.ornl.gov/"), "Energy data are from the", a("US Energy Information Administration (2019).", href = "https://www.eia.gov/state/seds/seds-data-complete.php?sid=US")),
+                                  
+                        fluidRow(DT::dataTableOutput('city_data')),
+                        
+                        fluidRow( 
+                                  p(),
+                                  p("Transportation data are taken from the", a("National Household Travel Survey", href = "https://nhts.ornl.gov/"), "Energy data are from the", a("US Energy Information Administration (2019).", href = "https://www.eia.gov/state/seds/seds-data-complete.php?sid=US")),
                                   p('City data reflect Core Based Statistical Areas (CBSA), per the 2019 American Community Survey. Renewable energy data are taken from the state-level and applied to each CBSA within the state (i.e., Buffalo and New York City are assumed to have the same energy mix).')
+                                )
                                   ),
                          tabPanel('About',
-                                  
+                                
+                                  fluidRow(
+                                    
+                                    column(6, 
+                                           
+                                  h4("About This Project"),
                                   p("Cities have set long-range goals to create a zero-emissions transportation system by 2050, consistent with IPCC goals. What mix of interventions will it take to get there? This tool complements the Decarbonizing Transportation workshop, and helps participants compare their strategies to major US cities."),
-                                  p("This platform reflects the Decarbonizing Transportation Model built by", a("Andrew Salzberg.", href = "https://www.linkedin.com/in/andrew-salzberg-a9625718/"), "Access the full Excel model", a("here.", href = "https://docs.google.com/spreadsheets/d/1odc3-H2BlM42PjJ-xAuPcuv7GDYESJXDWqADQwoy4TM/edit#gid=143699780"),
+                                  p("This platform reflects the Decarbonizing Transportation Model built by", a("Andrew Salzberg.", href = "https://www.linkedin.com/in/andrew-salzberg-a9625718/"), "Access the full Excel model", a("here.", href = "https://docs.google.com/spreadsheets/d/1odc3-H2BlM42PjJ-xAuPcuv7GDYESJXDWqADQwoy4TM/edit#gid=143699780")),
                                   p("Subscribe to the Decarbonizng Transportation newsletter", a("here.", href = "https://decarbonizingtransportation.substack.com/")),
-                                  p("Platform developed by", a("Emmett McKinney. Last updated January 1, 2021.", href = "https://www.emmettz.com")))
-                         )
+                                  p("Platform developed by", a("Emmett McKinney", href = "https://www.emmettz.com"),". Last updated January 9, 2021.")
+                                  ),
                                   
+                                  column(6,
+                                         p(h4('Variable Definitions (NHTS 2017)')),
+                                         p(strong('Renewable Energy Share'),": Percent of energy generation supplied by solar, wind, and hydroelectric power (EIA 2019). Cities are assumed to have the same energy mix as the primary state where they are located."),
+                                         p(strong("Low-Carbon Mode Share"),": Combined Percentage of trips made by walking, biking, micromobility, and transit."),
+                                         p(strong('Electric & Hybrid Veh. Mode Share'),": Percent of trips made in a vehicle powered by hybrid, electric, or alternative fuel."),
+                                         p(strong('Carpool Mode Share'),": Percent of home-to-work trips in vehicles with more than one occupant."),
+                                         p(strong("Telecommute %"),": Percent of travelers working from home."),
+                                         p(strong("Avg. Vehicle Occ."),": Average Vehicle Occupancy"),
+                                         p(),
+                                         p('The full NHTS codebook is available', a("here.", href = "https://nhts.ornl.gov/assets/codebook_v1.2.pdf"), "Last updated August 2020.")
+                                         ),
+                                  )
+                         )
                          
 )                                            
 )
